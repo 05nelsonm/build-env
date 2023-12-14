@@ -16,6 +16,7 @@ export LC_ALL=C
 set -e
 
 readonly DIR_TASK=$( cd "$( dirname "$0" )" >/dev/null && pwd )
+readonly FILE_BUILD_LOCK="$DIR_TASK/build/.lock"
 
 # Programs
 readonly DOCKER=$(which docker)
@@ -184,9 +185,11 @@ function build:mingw:x86_64 { ## Builds Windows x86_64
 function publish { ## Builds and publishes all containers
   __require:var_set "$1" "tag must be specified in first argument"
   __require:cmd "$GIT" "git"
-  build:all
 
   ${GIT} tag -s "$1" -m "Release v$1"
+
+  purge:all
+  build:all
 
   local images=
   local image=
@@ -201,6 +204,21 @@ function publish { ## Builds and publishes all containers
     ${DOCKER} tag "$image_id" "$repository:$1"
     ${DOCKER} push "$repository:$1"
   done
+}
+
+function purge:all { ## Purges all latest builds from docker images
+  local images=
+  local image=
+  local image_id
+
+  images="$(${DOCKER} image ls | grep '05nelsonm/build-env' | grep 'latest' | tr -s ' ' | cut -d ' ' -f 1-3 | tr ' ' '|')"
+
+  for image in $images; do
+    image_id="$(echo $image | cut -d '|' -f 3)"
+    ${DOCKER} image rm "$image_id"
+  done
+
+  ${DOCKER} builder prune --force
 }
 
 function help { ## THIS MENU
@@ -246,6 +264,7 @@ function __exec:docker:assemble {
   # Build macos base image if needed
   if [ "$os_name" = "macos" ]; then
     __exec:docker:build "linux-libc.base"
+    __exec:docker:build "darwin.base"
     __exec:docker:build "macos.base"
   fi
 
@@ -281,6 +300,15 @@ function __require:not_empty {
   __error "$2"
 }
 
+function __require:no_build_lock {
+  if [ ! -f "$FILE_BUILD_LOCK" ]; then return 0; fi
+
+  __error "Another task is in progress
+
+    If this is not the case, delete the following file and re-run the task
+    $FILE_BUILD_LOCK"
+}
+
 function __error {
   echo 1>&2 "
     ERROR: $1
@@ -299,6 +327,12 @@ elif ! grep -qE "^function $1 {" "$0"; then
 else
   # Ensure always starting in the root directory
   cd "$DIR_TASK"
+
+  # Setup a build lock to inhibit multiple shells
+  __require:no_build_lock
+  trap 'rm -rf "$FILE_BUILD_LOCK"' EXIT
+  mkdir -p "$DIR_TASK/build"
+  echo "$1" > "$FILE_BUILD_LOCK"
 
   TIMEFORMAT="
     Task '$1' completed in %3lR
