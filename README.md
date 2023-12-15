@@ -8,13 +8,13 @@ Currently is very bare bones, but gets the job done.
 
 e.g.
 ```sh
-# Drop into a shell with current directory mounted to compile something for macOS aarch64
+# Drop into a shell with current directory mounted to compile something for Linux aarch64
 
 docker run \
   --rm \
   -u "$(id -u):$(id -g)" \
   -v ./:/work \
-  -it 05nelsonm/build-env.macos.aarch64:0.1.0 \
+  -it 05nelsonm/build-env.linux-libc.aarch64:0.1.1 \
   bash
 ```
 
