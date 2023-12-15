@@ -47,6 +47,7 @@ function build:all:android { ## Builds all Android images
 function build:all:linux-libc { ## Builds all Linux Libc images
   build:linux-libc:aarch64
   build:linux-libc:armv7a
+  build:linux-libc:ppc64le
   build:linux-libc:x86
   build:linux-libc:x86_64
 }
@@ -120,6 +121,13 @@ function build:linux-libc:armv7a { ## Builds Linux Libc armv7a
   local os_name="linux"
   local os_subtype="-libc"
   local os_arch="armv7a"
+  __exec:docker:assemble
+}
+
+function build:linux-libc:armv7a { ## Builds Linux Libc ppc64le
+  local os_name="linux"
+  local os_subtype="-libc"
+  local os_arch="ppc64le"
   __exec:docker:assemble
 }
 
