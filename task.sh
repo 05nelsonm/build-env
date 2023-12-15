@@ -27,8 +27,8 @@ function build:all { ## Builds all images
 #  build:all:freebsd
   build:all:linux-libc
 #  build:all:linux-musl
-  build:all:macos
   build:all:mingw
+  build:all:macos
 }
 
 function build:all:android { ## Builds all Android images
@@ -185,6 +185,9 @@ function build:mingw:x86_64 { ## Builds Windows x86_64
 function publish { ## Builds and publishes all containers
   __require:var_set "$1" "tag must be specified in first argument"
   __require:cmd "$GIT" "git"
+  __require:cmd "$DOCKER" "docker"
+
+  ${DOCKER} login
 
   ${GIT} tag -s "$1" -m "Release v$1"
 
@@ -207,6 +210,8 @@ function publish { ## Builds and publishes all containers
 }
 
 function purge:all { ## Purges all latest builds from docker images
+  __require:cmd "$DOCKER" "docker"
+
   local images=
   local image=
   local image_id

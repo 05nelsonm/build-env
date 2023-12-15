@@ -4,7 +4,11 @@ ENV SHA256_SDK=5beee35d42f5bc4d1490b8856416ec5db63495cb31414f08caf63b63ce6e50c1 
     VERSION_DARWIN=21.4 \
     VERSION_SDK=12.3
 
+ENV PATH_OSXCROSS /usr/local/osxcross
 ENV PATH_SDK ${PATH_OSXCROSS}/SDK/MacOSX${VERSION_SDK}.sdk
+
+ENV CROSS_BIN ${PATH_OSXCROSS}/bin
+ENV PATH ${CROSS_BIN}:${PATH}
 
 RUN echo 'Building osxcross for macOS' && \
     mkdir -p /build && \
@@ -16,7 +20,7 @@ RUN echo 'Building osxcross for macOS' && \
     curl -O https://raw.githubusercontent.com/05nelsonm/build-env/sdk/macos/MacOSX${VERSION_SDK}.sdk.tar.gz && \
     if [ "$(sha256sum MacOSX${VERSION_SDK}.sdk.tar.gz | cut -d ' ' -f 1)" != "${SHA256_SDK}" ]; then exit 1; fi && \
     cd /build/osxcross && \
-    TARGET_DIR=/usr/local/osxcross \
+    TARGET_DIR=${PATH_OSXCROSS} \
       UNATTENDED=1 \
       ./build.sh && \
     cd / && \

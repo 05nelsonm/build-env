@@ -1,10 +1,6 @@
 FROM 05nelsonm/build-env.linux-libc.base:latest
 
-ENV PATH_OSXCROSS /usr/local/osxcross
-ENV CROSS_BIN ${PATH_OSXCROSS}/bin
-ENV PATH ${CROSS_BIN}:${PATH}
 ENV OSXCROSS_COMMIT_HASH 2389e32b8b6a531ce7280ae2c852c137cd771d80
-
 ENV OSXCROSS_ENABLE_WERROR_IMPLICIT_FUNCTION_DECLARATION 1
 
 RUN echo 'Installing packages for osxcross' && \
