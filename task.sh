@@ -220,15 +220,21 @@ function publish { ## Builds and publishes all containers
 function purge:all { ## Purges all latest builds from docker images
   __require:cmd "$DOCKER" "docker"
 
+  local tag="$1"
+  shift
+  if [ -z "$tag" ]; then
+    tag="latest"
+  fi
+
   local images=
   local image=
-  local image_id
+  local image_id=
 
-  images="$(${DOCKER} image ls | grep '05nelsonm/build-env' | grep 'latest' | tr -s ' ' | cut -d ' ' -f 1-3 | tr ' ' '|')"
+  images="$(${DOCKER} image ls | grep '05nelsonm/build-env' | grep "$tag" | tr -s ' ' | cut -d ' ' -f 1-3 | tr ' ' '|')"
 
   for image in $images; do
     image_id="$(echo $image | cut -d '|' -f 3)"
-    ${DOCKER} image rm "$image_id"
+    ${DOCKER} image rm "$image_id" "$@"
   done
 
   ${DOCKER} builder prune --force
