@@ -124,7 +124,7 @@ function build:linux-libc:armv7a { ## Builds Linux Libc armv7a
   __exec:docker:assemble
 }
 
-function build:linux-libc:armv7a { ## Builds Linux Libc ppc64le
+function build:linux-libc:ppc64le { ## Builds Linux Libc ppc64le
   local os_name="linux"
   local os_subtype="-libc"
   local os_arch="ppc64le"
