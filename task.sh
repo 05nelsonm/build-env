@@ -59,6 +59,8 @@ function build:all:linux-libc { ## Builds all Linux Libc images
 #}
 
 function build:all:macos { ## Builds all macOS images
+  build:macos-lts:aarch64
+  build:macos-lts:x86_64
   build:macos:aarch64
   build:macos:x86_64
 }
@@ -166,6 +168,16 @@ function build:linux-libc:x86_64 { ## Builds Linux Libc x86_64
 #  # TODO __exec:docker:assemble
 #}
 
+function build:macos-lts:aarch64 { ## Builds macOS LTS aarch64
+  local os_subtype="-lts"
+  build:macos:aarch64
+}
+
+function build:macos-lts:x86_64 { ## Builds macOS LTS x86_64
+  local os_subtype="-lts"
+  build:macos:x86_64
+}
+
 function build:macos:aarch64 { ## Builds macOS aarch64
   local os_name="macos"
   local os_arch="aarch64"
@@ -269,8 +281,7 @@ function __exec:docker:assemble {
   __require:var_set "$os_name" "os_name"
   __require:var_set "$os_name" "os_arch"
 
-  # Build linux libc/musl base image if needed
-  if [ -n "$os_subtype" ]; then
+  if [ "$os_name" = "linux" ]; then
     __exec:docker:build "linux$os_subtype.base"
   fi
 
@@ -284,7 +295,7 @@ function __exec:docker:assemble {
   if [ "$os_name" = "macos" ]; then
     __exec:docker:build "linux-libc.base"
     __exec:docker:build "darwin.base"
-    __exec:docker:build "macos.base"
+    __exec:docker:build "macos$os_subtype.base"
   fi
 
   # Build linux-libc base images if needed
