@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Version 0.1.3 (2023-12-19)
+ - `darwin.base` now utilizes `ubuntu:20.04` as base image [[#14]][14]
+ - `darwin.base` bumped `apple-llvm` to 17 [[#14]][14]
+ - `darwin.base` now includes some common tools utilized by `macos`, 
+   `macos-lts`, and future images for `ios`, `tvos` and `watchos`. [[#14]][14]
+
 ## Version 0.1.2 (2023-12-16)
  - `macos.base`, `macos.aarch64`, and `macos.x86_64` were migrated to 
    `macos-lts.base`, `macos-lts.aarch64`, and `macos-lts.x86_64` [[#12]][12]
@@ -20,3 +26,4 @@
 [7]: https://github.com/05nelsonm/build-env/pull/7
 [10]: https://github.com/05nelsonm/build-env/pull/10
 [12]: https://github.com/05nelsonm/build-env/pull/12
+[14]: https://github.com/05nelsonm/build-env/pull/14

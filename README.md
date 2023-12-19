@@ -17,7 +17,7 @@ docker run \
   --rm \
   -u "$(id -u):$(id -g)" \
   -v ./:/work \
-  -it 05nelsonm/build-env.linux-libc.aarch64:0.1.2 \
+  -it 05nelsonm/build-env.linux-libc.aarch64:0.1.3 \
   bash
 ```
 
@@ -89,7 +89,7 @@ version of `10.9`. This will remain constant.
 The `macos` containers utilize `MacOSX14.0.sdk` (currently) providing a minimum supported 
 version of `10.13`. This will **not** remain constant.
 
-[badge-latest-release]: https://img.shields.io/badge/latest--release-0.1.2-blue.svg?style=flat
+[badge-latest-release]: https://img.shields.io/badge/latest--release-0.1.3-blue.svg?style=flat
 [badge-license]: https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat
 
 [url-latest-release]: https://github.com/05nelsonm/build-env/releases/latest
