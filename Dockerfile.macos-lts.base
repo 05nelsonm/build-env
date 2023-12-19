@@ -1,21 +1,23 @@
 FROM 05nelsonm/build-env.darwin.base:latest
 
-ENV SHA256_SDK=5beee35d42f5bc4d1490b8856416ec5db63495cb31414f08caf63b63ce6e50c1 \
-    VERSION_DARWIN=21.4 \
+ENV VERSION_DARWIN=21.4 \
     VERSION_SDK=12.3
 
-ENV PATH_OSXCROSS /usr/local/osxcross
+ENV OSXCROSS_ENABLE_WERROR_IMPLICIT_FUNCTION_DECLARATION=1 \
+    PATH_OSXCROSS=/usr/local/osxcross
+
 ENV PATH_SDK ${PATH_OSXCROSS}/SDK/MacOSX${VERSION_SDK}.sdk
 
 ENV CROSS_BIN ${PATH_OSXCROSS}/bin
 ENV PATH ${CROSS_BIN}:${PATH}
 
 RUN echo 'Building osxcross for macOS' && \
+    SHA256_SDK=5beee35d42f5bc4d1490b8856416ec5db63495cb31414f08caf63b63ce6e50c1 && \
     mkdir -p /build && \
     cd /build && \
     git clone https://github.com/tpoechtrager/osxcross.git && \
     cd osxcross && \
-    git checkout ${OSXCROSS_COMMIT_HASH} && \
+    git checkout ff8d100f3f026b4ffbe4ce96d8aac4ce06f1278b && \
     cd /build/osxcross/tarballs && \
     curl -O https://raw.githubusercontent.com/05nelsonm/build-env/sdk/macos/MacOSX${VERSION_SDK}.sdk.tar.gz && \
     if [ "$(sha256sum MacOSX${VERSION_SDK}.sdk.tar.gz | cut -d ' ' -f 1)" != "${SHA256_SDK}" ]; then exit 1; fi && \
