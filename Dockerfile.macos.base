@@ -1,25 +1,33 @@
 FROM 05nelsonm/build-env.darwin.base:latest
 
-ENV SHA256_SDK=6e9ce77dca346010d6062913e1bab75494f68b74402a37d2faf4b31ceaaeb5be \
-    VERSION_DARWIN=23 \
+ENV VERSION_DARWIN=23 \
     VERSION_SDK=14.0
 
-ENV PATH_OSXCROSS /usr/local/osxcross
+ENV OSXCROSS_ENABLE_WERROR_IMPLICIT_FUNCTION_DECLARATION=1 \
+    PATH_OSXCROSS=/usr/local/osxcross
+
 ENV PATH_SDK ${PATH_OSXCROSS}/SDK/MacOSX${VERSION_SDK}.sdk
 
 ENV CROSS_BIN ${PATH_OSXCROSS}/bin
 ENV PATH ${CROSS_BIN}:${PATH}
 
 RUN echo 'Building osxcross for macOS' && \
+    SHA256_SDK=6e9ce77dca346010d6062913e1bab75494f68b74402a37d2faf4b31ceaaeb5be && \
     mkdir -p /build && \
     cd /build && \
     git clone https://github.com/tpoechtrager/osxcross.git && \
     cd osxcross && \
-    git checkout ${OSXCROSS_COMMIT_HASH} && \
+    git checkout ff8d100f3f026b4ffbe4ce96d8aac4ce06f1278b && \
     cd /build/osxcross/tarballs && \
     curl -O https://raw.githubusercontent.com/05nelsonm/build-env/sdk/macos/MacOSX${VERSION_SDK}.sdk.tar.xz && \
     if [ "$(sha256sum MacOSX${VERSION_SDK}.sdk.tar.xz | cut -d ' ' -f 1)" != "${SHA256_SDK}" ]; then exit 1; fi && \
     cd /build/osxcross && \
+    # xar installed at PATH_DARWINCROSS
+    sed -i 's+build_xar+# build_xar+' build.sh && \
+    sed -i 's+\"--with-libxar=\$TARGET_DIR \"+"--with-libxar=${PATH_DARWINCROSS} "+' build.sh && \
+    # apple-libtapi installed at PATH_DARWINCROSS
+    sed -i 's+get_sources https://github.com/tpoechtrager/apple-libtapi.git 1300.6.5+f_res=0+' build.sh && \
+    sed -i 's+\"--with-libtapi=\$TARGET_DIR \"+"--with-libtapi=${PATH_DARWINCROSS} "+' build.sh && \    
     TARGET_DIR=${PATH_OSXCROSS} \
       UNATTENDED=1 \
       ./build.sh && \

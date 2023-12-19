@@ -1,27 +1,139 @@
-FROM 05nelsonm/build-env.linux-libc.base:latest
+FROM amd64/ubuntu:20.04
 
-ENV OSXCROSS_COMMIT_HASH 2389e32b8b6a531ce7280ae2c852c137cd771d80
-ENV OSXCROSS_ENABLE_WERROR_IMPLICIT_FUNCTION_DECLARATION 1
+ARG DEBIAN_FRONTEND=noninteractive
 
-RUN echo 'Installing packages for osxcross' && \
+RUN echo 'Preparing base' && \
     apt-get update --yes && \
+    apt-get upgrade --yes && \
+    echo "path-exclude=/usr/share/locale/*" >> /etc/dpkg/dpkg.cfg.d/01_nodoc && \
+    echo "path-exclude=/usr/share/man/*" >> /etc/dpkg/dpkg.cfg.d/01_nodoc && \
+    echo "path-exclude=/usr/share/doc/*" >> /etc/dpkg/dpkg.cfg.d/01_nodoc && \
     apt-get install --no-install-recommends --yes \
+      autogen \
+      automake \
+      autopoint \
+      build-essential \
+      ca-certificates \
+      curl \
+      gettext \
+      git \
+      libtool \
+      make \
+      patch \
+      perl \
+      pkg-config \
+      python3 \
+      unzip \
+      wget \
+      zip && \
+    # cmake
+    apt-get install --no-install-recommends --yes \
+      libbz2-dev \
+      liblzma-dev \
+      libssl-dev \
+      zlib1g-dev && \
+    # osxcross
+    apt-get install --no-install-recommends --yes \
+      gobjc \
+      gobjc++ \
       icu-devtools \
       libicu-dev \
       libxml2-dev \
-      uuid-dev
+      uuid-dev && \
+    apt-get clean autoclean --yes && \
+    apt-get autoremove --yes && \
+    rm -rf /etc/ssh/*key*
+
+# Need cmake 3.20+ to build clang
+RUN echo 'Building cmake' && \
+    mkdir -p /build && \
+    cd /build && \
+    git clone https://gitlab.kitware.com/cmake/cmake.git && \
+    cd cmake && \
+    git checkout v3.26.5 && \
+    mkdir -p build && \
+    cd build && \
+    ../bootstrap --no-qt-gui \
+      --system-bzip2 \
+      --system-liblzma \
+      --system-zlib \
+      --prefix=/usr/local && \
+    make -j"$(nproc)" && \
+    make install && \
+    cd / && \
+    rm -rf /build
 
 RUN echo 'Building apple clang. THIS WILL TAKE A WHILE!' && \
     mkdir -p /build && \
     cd /build && \
     git clone https://github.com/tpoechtrager/osxcross.git && \
     cd osxcross && \
-    git checkout ${OSXCROSS_COMMIT_HASH} && \
+    git checkout ff8d100f3f026b4ffbe4ce96d8aac4ce06f1278b && \
     ENABLE_BOOTSTRAP=1 \
       ENABLE_FULL_BOOTSTRAP=1 \
       ENABLE_CLANG_INSTALL=1 \
-      CLANG_VERSION=15 \
+      CLANG_VERSION=17 \
       UNATTENDED=1 \
       ./build_apple_clang.sh && \
+    cd /usr/local/bin && \
+    ln -sf llvm-lipo lipo && \
+    rm -rf /build
+
+ENV PATH_DARWINCROSS /usr/local/darwincross
+ENV PATH ${PATH_DARWINCROSS}/bin:${PATH}
+
+RUN echo 'Building ldid' && \
+    mkdir -p ${PATH_DARWINCROSS} && \
+    mkdir -p /build && \
+    cd /build && \
+    git clone https://github.com/tpoechtrager/ldid.git && \
+    cd ldid && \
+    git checkout 4bf8f4d60384a0693dbbe2084ce62a35bfeb87ab && \
+    make INSTALLPREFIX=${PATH_DARWINCROSS} -j"$(nproc)" install && \
     cd / && \
     rm -rf /build
+
+RUN echo 'Building apple-libdispatch' && \
+    mkdir -p /build && \
+    cd /build && \
+    git clone https://github.com/tpoechtrager/apple-libdispatch.git && \
+    cd apple-libdispatch && \
+    git checkout ee39300b12a77efd3f2f020e009e42d557adbb29 && \
+    mkdir -p build && \
+    cd build && \
+    CC=clang CXX=clang++ \
+      cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=${PATH_DARWINCROSS} && \
+    make install -j"$(nproc)" && \
+    cd /build && \
+    rm -rf /build
+
+RUN echo 'Building xar' && \
+    mkdir -p /build && \
+    cd /build && \
+    git clone https://github.com/tpoechtrager/xar.git && \
+    cd xar && \
+    git checkout 5fa4675419cfec60ac19a9c7f7c2d0e7c831a497 && \
+    cd xar && \
+    CFLAGS="-w" && \
+    ./configure --prefix=${PATH_DARWINCROSS} && \
+    make -j"$(nproc)" && \
+    make install -j"$(nproc)" && \
+    cd / && \
+    rm -rf /build
+
+RUN echo 'Building apple-libtapi' && \
+    mkdir -p /build && \
+    cd /build && \
+    git clone https://github.com/tpoechtrager/apple-libtapi.git && \
+    cd apple-libtapi && \
+    git checkout 1300.6.5 && \
+    INSTALLPREFIX=${PATH_DARWINCROSS} ./build.sh && \
+    ./install.sh && \
+    cd / && \
+    rm -rf /build
+
+WORKDIR /work
+
+COPY entrypoint_base.sh /var/opt
+
+ENTRYPOINT ["/var/opt/entrypoint_base.sh"]

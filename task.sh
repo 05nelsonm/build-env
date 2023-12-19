@@ -293,7 +293,6 @@ function __exec:docker:assemble {
 
   # Build macos base image if needed
   if [ "$os_name" = "macos" ]; then
-    __exec:docker:build "linux-libc.base"
     __exec:docker:build "darwin.base"
     __exec:docker:build "macos$os_subtype.base"
   fi
