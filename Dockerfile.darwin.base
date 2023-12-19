@@ -106,6 +106,20 @@ RUN echo 'Building apple-libdispatch' && \
     cd /build && \
     rm -rf /build
 
+RUN echo 'Building xar' && \
+    mkdir -p /build && \
+    cd /build && \
+    git clone https://github.com/tpoechtrager/xar.git && \
+    cd xar && \
+    git checkout 5fa4675419cfec60ac19a9c7f7c2d0e7c831a497 && \
+    cd xar && \
+    CFLAGS="-w" && \
+    ./configure --prefix=${PATH_DARWINCROSS} && \
+    make -j"$(nproc)" && \
+    make install -j"$(nproc)" && \
+    cd / && \
+    rm -rf /build
+
 RUN echo 'Building apple-libtapi' && \
     PATH=${PATH_DARWINCROSS}/bin:${PATH} && \
     mkdir -p /build && \
