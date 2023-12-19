@@ -22,6 +22,12 @@ RUN echo 'Building osxcross for macOS' && \
     curl -O https://raw.githubusercontent.com/05nelsonm/build-env/sdk/macos/MacOSX${VERSION_SDK}.sdk.tar.xz && \
     if [ "$(sha256sum MacOSX${VERSION_SDK}.sdk.tar.xz | cut -d ' ' -f 1)" != "${SHA256_SDK}" ]; then exit 1; fi && \
     cd /build/osxcross && \
+    # xar installed at PATH_DARWINCROSS
+    sed -i 's+build_xar+# build_xar+' build.sh && \
+    sed -i 's+\"--with-libxar=\$TARGET_DIR \"+"--with-libxar=${PATH_DARWINCROSS} "+' build.sh && \
+    # apple-libtapi installed at PATH_DARWINCROSS
+    sed -i 's+get_sources https://github.com/tpoechtrager/apple-libtapi.git 1300.6.5+f_res=0+' build.sh && \
+    sed -i 's+\"--with-libtapi=\$TARGET_DIR \"+"--with-libtapi=${PATH_DARWINCROSS} "+' build.sh && \    
     TARGET_DIR=${PATH_OSXCROSS} \
       UNATTENDED=1 \
       ./build.sh && \

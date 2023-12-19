@@ -80,6 +80,7 @@ RUN echo 'Building apple clang. THIS WILL TAKE A WHILE!' && \
     rm -rf /build
 
 ENV PATH_DARWINCROSS /usr/local/darwincross
+ENV PATH ${PATH_DARWINCROSS}/bin:${PATH}
 
 RUN echo 'Building ldid' && \
     mkdir -p ${PATH_DARWINCROSS} && \
@@ -121,7 +122,6 @@ RUN echo 'Building xar' && \
     rm -rf /build
 
 RUN echo 'Building apple-libtapi' && \
-    PATH=${PATH_DARWINCROSS}/bin:${PATH} && \
     mkdir -p /build && \
     cd /build && \
     git clone https://github.com/tpoechtrager/apple-libtapi.git && \
