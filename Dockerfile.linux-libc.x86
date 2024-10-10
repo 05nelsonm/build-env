@@ -8,9 +8,9 @@ RUN echo 'Installing packages for i686' && \
       gcc-multilib \
       libc6:i386
 
-ENV CROSS_TRIPLE i686-linux-gnu
-ENV CROSS_BIN /usr/${CROSS_TRIPLE}/bin
-ENV PATH ${CROSS_BIN}:${PATH}
+ENV CROSS_TRIPLE=i686-linux-gnu
+ENV CROSS_BIN=/usr/${CROSS_TRIPLE}/bin
+ENV PATH=${CROSS_BIN}:${PATH}
 
 # Create symlinks for x86_64 binaries that support x86 and x86_64 targets natively
 RUN mkdir -p ${CROSS_BIN} && \

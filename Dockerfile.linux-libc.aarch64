@@ -7,8 +7,8 @@ RUN echo 'Installing packages for aarch64' && \
       gcc-aarch64-linux-gnu \
       pkg-config-aarch64-linux-gnu
 
-ENV CROSS_TRIPLE aarch64-linux-gnu
-ENV CROSS_BIN /usr/bin
+ENV CROSS_TRIPLE=aarch64-linux-gnu
+ENV CROSS_BIN=/usr/bin
 
 ENV AR=${CROSS_BIN}/${CROSS_TRIPLE}-ar \
     AS=${CROSS_BIN}/${CROSS_TRIPLE}-as \
