@@ -233,8 +233,9 @@ function purge:all { ## Purges all latest builds from docker images
   __require:cmd "$DOCKER" "docker"
 
   local tag="$1"
-  shift
-  if [ -z "$tag" ]; then
+  if [ -n "$tag" ]; then
+    shift
+  else
     tag="latest"
   fi
 
@@ -285,21 +286,19 @@ function __exec:docker:assemble {
     __exec:docker:build "linux$os_subtype.base"
   fi
 
-  # Build android base image if needed
   if [ "$os_name" = "android" ]; then
-    __exec:docker:build "linux-libc.base"
+    __exec:docker:build "non-linux.base"
     __exec:docker:build "android.base"
   fi
 
-  # Build macos base image if needed
   if [ "$os_name" = "macos" ]; then
+    __exec:docker:build "non-linux.base"
     __exec:docker:build "darwin.base"
     __exec:docker:build "macos$os_subtype.base"
   fi
 
-  # Build linux-libc base images if needed
   if [ "$os_name" = "mingw" ]; then
-    __exec:docker:build "linux-libc.base"
+    __exec:docker:build "non-linux.base"
   fi
 
   # Build final container

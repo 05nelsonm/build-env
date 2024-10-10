@@ -1,4 +1,4 @@
-FROM 05nelsonm/build-env.linux-libc.base:latest
+FROM 05nelsonm/build-env.non-linux.base:latest
 
 # https://github.com/android/ndk/wiki
 ENV REVISION_NDK=26b \
@@ -13,15 +13,15 @@ RUN cd /usr/local && \
     unzip android-ndk-r${REVISION_NDK}-linux.zip && \
     rm -rf android-ndk-r${REVISION_NDK}-linux.zip
 
-ENV PATH_NDK /usr/local/android-ndk-r${REVISION_NDK}
-ENV PATH_PREBUILT ${PATH_NDK}/toolchains/llvm/prebuilt/linux-x86_64
+ENV PATH_NDK=/usr/local/android-ndk-r${REVISION_NDK}
+ENV PATH_PREBUILT=${PATH_NDK}/toolchains/llvm/prebuilt/linux-x86_64
 
 ENV ANDROID_NDK=${PATH_NDK} \
     ANDROID_NDK_HOME=${PATH_NDK} \
     ANDROID_NDK_ROOT=${PATH_NDK}
 
-ENV CROSS_BIN ${PATH_PREBUILT}/bin
-ENV PATH ${CROSS_BIN}:${PATH}
+ENV CROSS_BIN=${PATH_PREBUILT}/bin
+ENV PATH=${CROSS_BIN}:${PATH}
 
 ENV AR=${CROSS_BIN}/llvm-ar \
     AS=${CROSS_BIN}/llvm-as \

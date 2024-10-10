@@ -1,4 +1,4 @@
-FROM 05nelsonm/build-env.linux-libc.base:latest
+FROM 05nelsonm/build-env.non-linux.base:latest
 
 RUN echo 'Installing packages for mingw x86_64' && \
     apt-get update --yes && \
@@ -8,8 +8,8 @@ RUN echo 'Installing packages for mingw x86_64' && \
       gcc-mingw-w64-x86-64 \
       mingw-w64-tools
 
-ENV CROSS_TRIPLE x86_64-w64-mingw32
-ENV CROSS_BIN /usr/bin
+ENV CROSS_TRIPLE=x86_64-w64-mingw32
+ENV CROSS_BIN=/usr/bin
 
 ENV AR=${CROSS_BIN}/${CROSS_TRIPLE}-ar \
     AS=${CROSS_BIN}/${CROSS_TRIPLE}-as \

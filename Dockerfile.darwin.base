@@ -1,67 +1,14 @@
-FROM amd64/ubuntu:20.04
+FROM 05nelsonm/build-env.non-linux.base:latest
 
-ARG DEBIAN_FRONTEND=noninteractive
-
-RUN echo 'Preparing base' && \
+RUN echo 'Installing packages for osxcross' && \
     apt-get update --yes && \
-    apt-get upgrade --yes && \
-    echo "path-exclude=/usr/share/locale/*" >> /etc/dpkg/dpkg.cfg.d/01_nodoc && \
-    echo "path-exclude=/usr/share/man/*" >> /etc/dpkg/dpkg.cfg.d/01_nodoc && \
-    echo "path-exclude=/usr/share/doc/*" >> /etc/dpkg/dpkg.cfg.d/01_nodoc && \
-    apt-get install --no-install-recommends --yes \
-      autogen \
-      automake \
-      autopoint \
-      build-essential \
-      ca-certificates \
-      curl \
-      gettext \
-      git \
-      libtool \
-      make \
-      patch \
-      perl \
-      pkg-config \
-      python3 \
-      unzip \
-      wget \
-      zip && \
-    # cmake
-    apt-get install --no-install-recommends --yes \
-      libbz2-dev \
-      liblzma-dev \
-      libssl-dev \
-      zlib1g-dev && \
-    # osxcross
-    apt-get install --no-install-recommends --yes \
+    apt-get install --yes \
       gobjc \
       gobjc++ \
       icu-devtools \
       libicu-dev \
       libxml2-dev \
-      uuid-dev && \
-    apt-get clean autoclean --yes && \
-    apt-get autoremove --yes && \
-    rm -rf /etc/ssh/*key*
-
-# Need cmake 3.20+ to build clang
-RUN echo 'Building cmake' && \
-    mkdir -p /build && \
-    cd /build && \
-    git clone https://gitlab.kitware.com/cmake/cmake.git && \
-    cd cmake && \
-    git checkout v3.26.5 && \
-    mkdir -p build && \
-    cd build && \
-    ../bootstrap --no-qt-gui \
-      --system-bzip2 \
-      --system-liblzma \
-      --system-zlib \
-      --prefix=/usr/local && \
-    make -j"$(nproc)" && \
-    make install && \
-    cd / && \
-    rm -rf /build
+      uuid-dev
 
 RUN echo 'Building apple clang. THIS WILL TAKE A WHILE!' && \
     mkdir -p /build && \
@@ -79,8 +26,8 @@ RUN echo 'Building apple clang. THIS WILL TAKE A WHILE!' && \
     ln -sf llvm-lipo lipo && \
     rm -rf /build
 
-ENV PATH_DARWINCROSS /usr/local/darwincross
-ENV PATH ${PATH_DARWINCROSS}/bin:${PATH}
+ENV PATH_DARWINCROSS=/usr/local/darwincross
+ENV PATH=${PATH_DARWINCROSS}/bin:${PATH}
 
 RUN echo 'Building ldid' && \
     mkdir -p ${PATH_DARWINCROSS} && \
@@ -132,8 +79,3 @@ RUN echo 'Building apple-libtapi' && \
     cd / && \
     rm -rf /build
 
-WORKDIR /work
-
-COPY entrypoint_base.sh /var/opt
-
-ENTRYPOINT ["/var/opt/entrypoint_base.sh"]
