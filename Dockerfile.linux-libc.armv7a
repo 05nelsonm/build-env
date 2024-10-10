@@ -7,8 +7,8 @@ RUN echo 'Installing packages for armv7a' && \
       gcc-arm-linux-gnueabihf \
       pkg-config-arm-linux-gnueabihf
 
-ENV CROSS_TRIPLE arm-linux-gnueabihf
-ENV CROSS_BIN /usr/bin
+ENV CROSS_TRIPLE=arm-linux-gnueabihf
+ENV CROSS_BIN=/usr/bin
 
 ENV AR=${CROSS_BIN}/${CROSS_TRIPLE}-ar \
     AS=${CROSS_BIN}/${CROSS_TRIPLE}-as \

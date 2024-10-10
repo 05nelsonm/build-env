@@ -1,7 +1,7 @@
 FROM 05nelsonm/build-env.linux-libc.base:latest
 
-ENV CROSS_TRIPLE x86_64-linux-gnu
-ENV CROSS_BIN /usr/bin
+ENV CROSS_TRIPLE=x86_64-linux-gnu
+ENV CROSS_BIN=/usr/bin
 
 ENV AR=${CROSS_BIN}/${CROSS_TRIPLE}-ar \
     AS=${CROSS_BIN}/${CROSS_TRIPLE}-as \
