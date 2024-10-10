@@ -1,0 +1,42 @@
+FROM amd64/ubuntu:22.04
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN echo 'Preparing base' && \
+    apt-get update --yes && \
+    apt-get upgrade --yes && \
+    echo "path-exclude=/usr/share/locale/*" >> /etc/dpkg/dpkg.cfg.d/01_nodoc && \
+    echo "path-exclude=/usr/share/man/*" >> /etc/dpkg/dpkg.cfg.d/01_nodoc && \
+    echo "path-exclude=/usr/share/doc/*" >> /etc/dpkg/dpkg.cfg.d/01_nodoc && \
+    apt-get install --no-install-recommends --yes \
+      autogen \
+      automake \
+      autopoint \
+      build-essential \
+      ca-certificates \
+      cmake \
+      curl \
+      gettext \
+      git \
+      libbz2-dev \
+      liblzma-dev \
+      libssl-dev \
+      libtool \
+      make \
+      patch \
+      perl \
+      pkg-config \
+      python3 \
+      unzip \
+      wget \
+      zip \
+      zlib1g-dev && \
+    apt-get clean autoclean --yes && \
+    apt-get autoremove --yes && \
+    rm -rf /etc/ssh/*key*
+
+WORKDIR /work
+
+COPY entrypoint_base.sh /var/opt
+
+ENTRYPOINT ["/var/opt/entrypoint_base.sh"]
