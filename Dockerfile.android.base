@@ -7,7 +7,8 @@ ENV REVISION_NDK=26b \
     VERSION_ANDROID=21 \
     VERSION_NDK=26.1.10909125
 
-RUN cd /usr/local && \
+RUN echo 'Installing Android NDK' && \
+    cd /usr/local && \
     curl -O https://dl.google.com/android/repository/android-ndk-r${REVISION_NDK}-linux.zip && \
     if [ "$(sha256sum android-ndk-r${REVISION_NDK}-linux.zip | cut -d ' ' -f 1)" != "${SHA256_NDK}" ]; then exit 1; fi && \
     unzip android-ndk-r${REVISION_NDK}-linux.zip && \
@@ -28,3 +29,12 @@ ENV AR=${CROSS_BIN}/llvm-ar \
     LD=${CROSS_BIN}/ld \
     RANLIB=${CROSS_BIN}/llvm-ranlib \
     STRIP=${CROSS_BIN}/llvm-strip
+
+RUN echo 'Setting up JNI header files for linux' && \
+    for jversion in $(echo ${JNI_JAVA_VERSIONS} | tr "," " "); do       \
+      cd ${JNI_H}/${jversion}/include;                                  \
+      ln -s linux/jni_md.h jni_md.h;                                    \
+      if [ "$jversion" != "java6" ]; then continue; fi;                 \
+      ln -s linux/jni.h jni.h;                                          \
+    done
+
