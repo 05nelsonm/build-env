@@ -34,6 +34,9 @@ docker run \
    LD
    RANLIB
    STRIP
+   JNI_H                # location of jni.h and jni_md.h headers for various
+                        # versions of java (currently 6,8,11,17,21)
+                        # e.g. CFLAGS="-I${JNI_H}/java8/include"
    ```
 
  - Android images

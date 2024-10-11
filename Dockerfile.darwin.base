@@ -79,3 +79,10 @@ RUN echo 'Building apple-libtapi' && \
     cd / && \
     rm -rf /build
 
+RUN echo 'Setting up JNI header files for darwin' && \
+    for jversion in $(echo ${JNI_JAVA_VERSIONS} | tr "," " "); do       \
+      cd ${JNI_H}/${jversion}/include;                                  \
+      ln -s darwin/jni_md.h jni_md.h;                                   \
+      if [ "$jversion" != "java6" ]; then continue; fi;                 \
+      ln -s darwin/jni.h jni.h;                                         \
+    done
