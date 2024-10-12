@@ -1,10 +1,17 @@
 # CHANGELOG
 
+## Version 0.2.0 (2024-10-11)
+ - Adds `non-linux.base` image for all non-`linux-libc` images [[#18]][18]
+     - Based off of `ubuntu:22.04`
+ - Migrates all non-`linux-libc` images to inherit from `non-linux.base` [[#18]][18]
+ - Adds `JNI` headers to all images at `${JNI_H}/{java-version}/include` [[#20]][20]
+     - e.g. `export CFLAGS="-I${JNI_H}/java8/include"`
+
 ## Version 0.1.3 (2023-12-19)
  - `darwin.base` now utilizes `ubuntu:20.04` as base image [[#14]][14]
  - `darwin.base` bumped `apple-llvm` to 17 [[#14]][14]
  - `darwin.base` now includes some common tools utilized by `macos`, 
-   `macos-lts`, and future images for `ios`, `tvos` and `watchos`. [[#14]][14]
+   `macos-lts`, and future images for `ios`, `tvos` and `watchos` [[#14]][14]
 
 ## Version 0.1.2 (2023-12-16)
  - `macos.base`, `macos.aarch64`, and `macos.x86_64` were migrated to 
@@ -27,3 +34,5 @@
 [10]: https://github.com/05nelsonm/build-env/pull/10
 [12]: https://github.com/05nelsonm/build-env/pull/12
 [14]: https://github.com/05nelsonm/build-env/pull/14
+[18]: https://github.com/05nelsonm/build-env/pull/18
+[20]: https://github.com/05nelsonm/build-env/pull/20
