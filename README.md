@@ -52,6 +52,16 @@ docker run \
    REVISION_NDK         # e.g. 26b
    ```
 
+ - Ios & Ios Simulator images
+   ```
+   CROSS_TARGET         # CROSS_TRIPLE but w/o the version suffix
+   PATH_SDK             # location of iPhoneOS{version}.sdk
+   PATH_IOSCROSS        # location of ioscross
+   VERSION_DARWIN
+   VERSION_SDK
+   VERSION_MIN          # minimum ios version
+   ```
+
  - Macos images
    ```
    CROSS_TARGET         # CROSS_TRIPLE but w/o the version suffix

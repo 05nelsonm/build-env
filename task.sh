@@ -24,6 +24,7 @@ readonly GIT=$(which git)
 
 function build:all { ## Builds all images
   build:all:android
+  build:all:ios
 #  build:all:freebsd
   build:all:linux-libc
 #  build:all:linux-musl
@@ -43,6 +44,12 @@ function build:all:android { ## Builds all Android images
 #  build:freebsd:x86
 #  build:freebsd:x86_64
 #}
+
+function build:all:ios { ## Builds all iOS images
+  build:ios-simulator:aarch64
+  build:ios-simulator:x86_64
+  build:ios:aarch64
+}
 
 function build:all:linux-libc { ## Builds all Linux Libc images
   build:linux-libc:aarch64
@@ -111,6 +118,26 @@ function build:android:x86_64 { ## Builds Android x86_64
 #  local os_arch="x86_64"
 #  # TODO __exec:docker:assemble
 #}
+
+function build:ios-simulator:aarch64 { ## Builds iOS Simulator aarch64
+  local os_name="ios"
+  local os_subtype="-simulator"
+  local os_arch="aarch64"
+  __exec:docker:assemble
+}
+
+function build:ios-simulator:x86_64 { ## Builds iOS Simulator x86_64
+  local os_name="ios"
+  local os_subtype="-simulator"
+  local os_arch="x86_64"
+  __exec:docker:assemble
+}
+
+function build:ios:aarch64 { ## Builds iOS aarch64
+  local os_name="ios"
+  local os_arch="aarch64"
+  __exec:docker:assemble
+}
 
 function build:linux-libc:aarch64 { ## Builds Linux Libc aarch64
   local os_name="linux"
@@ -282,13 +309,19 @@ function __exec:docker:assemble {
   __require:var_set "$os_name" "os_name"
   __require:var_set "$os_name" "os_arch"
 
-  if [ "$os_name" = "linux" ]; then
-    __exec:docker:build "linux$os_subtype.base"
-  fi
-
   if [ "$os_name" = "android" ]; then
     __exec:docker:build "non-linux.base"
     __exec:docker:build "android.base"
+  fi
+
+  if [ "$os_name" = "ios" ]; then
+    __exec:docker:build "non-linux.base"
+    __exec:docker:build "darwin.base"
+    __exec:docker:build "ios.base"
+  fi
+
+  if [ "$os_name" = "linux" ]; then
+    __exec:docker:build "linux$os_subtype.base"
   fi
 
   if [ "$os_name" = "macos" ]; then
