@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Version 0.3.0 (2025-02-19)
+ - `non-linux.base` now utilizes `ubuntu:24.04` [[#25]][25]
+ - `macos.base`, `macos.aarch64`, and `macos.x86_64` now use
+   `MacOSX15.1.sdk` [[#24]][24]
+ - `android.base` now utilizes NDK revision `28` [[#27]][27]
+ - Adds support for `ios.aarch64`, `ios-simulator.aarch64`, and `ios-simulator.x86_64` [[#26]][26]
+
 ## Version 0.2.0 (2024-10-11)
  - Adds `non-linux.base` image for all non-`linux-libc` images [[#18]][18]
      - Based off of `ubuntu:22.04`
@@ -36,3 +43,7 @@
 [14]: https://github.com/05nelsonm/build-env/pull/14
 [18]: https://github.com/05nelsonm/build-env/pull/18
 [20]: https://github.com/05nelsonm/build-env/pull/20
+[24]: https://github.com/05nelsonm/build-env/pull/24
+[25]: https://github.com/05nelsonm/build-env/pull/25
+[26]: https://github.com/05nelsonm/build-env/pull/26
+[27]: https://github.com/05nelsonm/build-env/pull/27

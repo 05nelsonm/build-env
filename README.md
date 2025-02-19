@@ -17,7 +17,7 @@ docker run \
   --rm \
   -u "$(id -u):$(id -g)" \
   -v ./:/work \
-  -it 05nelsonm/build-env.linux-libc.aarch64:0.2.0 \
+  -it 05nelsonm/build-env.linux-libc.aarch64:0.3.0 \
   bash
 ```
 
@@ -97,13 +97,17 @@ ${CROSS_TARGET}{desired-api}-{tool}
 **Macos:**
 
 The `macos-lts` containers utilize `MacOSX12.3.sdk` providing a minimum supported 
-version of `10.9`. This will remain constant.
+version of `10.9`. This will follow Apple's End Of Life schedule for `macOS` which can be 
+found [HERE][url-macos-eol]. After about 1 year of EOL, the SDK will be bumped.
 
-The `macos` containers utilize `MacOSX14.0.sdk` (currently) providing a minimum supported 
-version of `10.13`. This will **not** remain constant.
+The `macos` containers utilize `MacOSX15.1.sdk` (currently) providing a minimum supported 
+version of `10.13`. This will follow Kotlin Multiplatform's Xcode compatibility version 
+which can be found [HERE][url-kotlin-compatibility].
 
-[badge-latest-release]: https://img.shields.io/badge/latest--release-0.2.0-blue.svg?style=flat
+[badge-latest-release]: https://img.shields.io/badge/latest--release-0.3.0-blue.svg?style=flat
 [badge-license]: https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat
 
 [url-latest-release]: https://github.com/05nelsonm/build-env/releases/latest
 [url-license]: https://www.apache.org/licenses/LICENSE-2.0
+[url-kotlin-compatibility]: https://kotlinlang.org/docs/multiplatform-compatibility-guide.html#version-compatibility
+[url-macos-eol]: https://endoflife.date/macos
