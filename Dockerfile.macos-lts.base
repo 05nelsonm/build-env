@@ -17,7 +17,7 @@ RUN echo 'Building osxcross for macOS' && \
     cd /build && \
     git clone https://github.com/tpoechtrager/osxcross.git && \
     cd osxcross && \
-    git checkout ff8d100f3f026b4ffbe4ce96d8aac4ce06f1278b && \
+    git checkout 611675b5179c4a9a5e33eac6c376ed8f986bab21 && \
     cd /build/osxcross/tarballs && \
     curl -O https://raw.githubusercontent.com/05nelsonm/build-env/sdk/macos/MacOSX${VERSION_SDK}.sdk.tar.gz && \
     if [ "$(sha256sum MacOSX${VERSION_SDK}.sdk.tar.gz | cut -d ' ' -f 1)" != "${SHA256_SDK}" ]; then exit 1; fi && \

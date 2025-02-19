@@ -15,7 +15,7 @@ RUN echo 'Building apple clang. THIS WILL TAKE A WHILE!' && \
     cd /build && \
     git clone https://github.com/tpoechtrager/osxcross.git && \
     cd osxcross && \
-    git checkout ff8d100f3f026b4ffbe4ce96d8aac4ce06f1278b && \
+    git checkout 611675b5179c4a9a5e33eac6c376ed8f986bab21 && \
     ENABLE_BOOTSTRAP=1 \
       ENABLE_FULL_BOOTSTRAP=1 \
       ENABLE_CLANG_INSTALL=1 \
@@ -45,7 +45,7 @@ RUN echo 'Building apple-libdispatch' && \
     cd /build && \
     git clone https://github.com/tpoechtrager/apple-libdispatch.git && \
     cd apple-libdispatch && \
-    git checkout ee39300b12a77efd3f2f020e009e42d557adbb29 && \
+    git checkout fdf3fc85a9557635668c78801d79f10161d83f12 && \
     mkdir -p build && \
     cd build && \
     CC=clang CXX=clang++ \
@@ -73,7 +73,7 @@ RUN echo 'Building apple-libtapi' && \
     cd /build && \
     git clone https://github.com/tpoechtrager/apple-libtapi.git && \
     cd apple-libtapi && \
-    git checkout 1300.6.5 && \
+    git checkout 54c9044082ba35bdb2b0edf282ba1a340096154c && \
     INSTALLPREFIX=${PATH_DARWINCROSS} ./build.sh && \
     ./install.sh && \
     cd / && \
