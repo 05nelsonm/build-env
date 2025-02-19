@@ -45,7 +45,7 @@ function build:all:android { ## Builds all Android images
 #  build:freebsd:x86_64
 #}
 
-function build:all:ios { ## Builds all iOS and iOS Simulator images
+function build:all:ios { ## Builds all iOS images
   build:ios-simulator:aarch64
   build:ios-simulator:x86_64
   build:ios:aarch64
