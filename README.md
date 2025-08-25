@@ -17,7 +17,7 @@ Creating the Sdk:
     -e ID_U="$(id -u)" \
     -e ID_G="$(id -g)" \
     -v ./:/work \
-    -it 05nelsonm/build-env.non-linux.base:0.2.0 \
+    -it 05nelsonm/build-env.non-linux.base:0.3.0 \
     bash
   ```
 
@@ -44,7 +44,7 @@ Creating the Sdk:
     cd /build && \
     git clone https://github.com/tpoechtrager/osxcross.git && \
     cd osxcross && \
-    git checkout 611675b5179c4a9a5e33eac6c376ed8f986bab21
+    git checkout f873f534c6cdb0776e457af8c7513da1e02abe59
   ```
 
 - Generate the `MacOSX` sdk (replace `{xcode-download.xip}` with the actual file name)
@@ -55,12 +55,10 @@ Creating the Sdk:
 - Modify the script to next look for `iPhoneOS` sdk
   ```shell
   sed -i 's+MacOSX.platform+iPhoneOS.platform+' tools/gen_sdk_package.sh
-  sed -i 's+MacOSX15.+iPhoneOS18.+' tools/gen_sdk_package.sh
-  sed -i 's+MacOSX14.+iPhoneOS17.+' tools/gen_sdk_package.sh
-  sed -i 's+MacOSX13.+iPhoneOS16.+' tools/gen_sdk_package.sh
-  sed -i 's+MacOSX12.+iPhoneOS15.+' tools/gen_sdk_package.sh
-  sed -i 's+MacOSX11.+iPhoneOS14.+' tools/gen_sdk_package.sh
-  sed -i 's+MacOSX10.+iPhoneOS13.+' tools/gen_sdk_package.sh
+  sed -i 's+MacOS\[+iPhoneOS\[+' tools/gen_sdk_package.sh
+  sed -i 's+MacOSX\[+iPhoneOS\[+' tools/gen_sdk_package.sh
+  sed -i 's+MacOSX+iPhoneOS+' tools/gen_sdk_package.sh
+  sed -i 's+MacOS.sdk+iPhoneOS.sdk+' tools/gen_sdk_package.sh
   ```
 
 - Generate the `iPhoneOS` sdk (replace `{xcode-download.xip}` with the actual file name)
@@ -100,13 +98,7 @@ Creating the Sdk:
 
 - Modify the script to next look for `WatchOS` sdk
   ```shell
-  sed -i 's+AppleTVSimulator.platform+WatchOS.platform+' tools/gen_sdk_package.sh
-  sed -i 's+AppleTVSimulator18.+WatchOS11.+' tools/gen_sdk_package.sh
-  sed -i 's+AppleTVSimulator17.+WatchOS10.+' tools/gen_sdk_package.sh
-  sed -i 's+AppleTVSimulator16.+WatchOS9.+' tools/gen_sdk_package.sh
-  sed -i 's+AppleTVSimulator15.+WatchOS8.+' tools/gen_sdk_package.sh
-  sed -i 's+AppleTVSimulator14.+WatchOS7.+' tools/gen_sdk_package.sh
-  sed -i 's+AppleTVSimulator13.+WatchOS6.+' tools/gen_sdk_package.sh
+  sed -i 's+AppleTVSimulator+WatchOS+' tools/gen_sdk_package.sh
   ```
 
 - Generate the `WatchOS` sdk (replace `{xcode-download.xip}` with the actual file name)
