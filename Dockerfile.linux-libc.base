@@ -1,4 +1,4 @@
-FROM amd64/ubuntu:16.04
+FROM amd64/ubuntu:18.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -74,12 +74,11 @@ RUN echo 'Building cmake' && \
     cd / && \
     rm -rf /build
 
-ENV JNI_H=/usr/local/jni \
-    JNI_JAVA_VERSIONS=java6,java8,java11,java17,java21
+ENV JNI_H=/usr/local/jni
 
 RUN echo 'Setting up JNI header files for linux' && \
     mkdir -p ${JNI_H} && \
-    for jversion in $(echo ${JNI_JAVA_VERSIONS} | tr "," " "); do                                                               \
+    for jversion in $(echo "java6,java8,java11,java17,java21" | tr "," " "); do                                                 \
       cd ${JNI_H};                                                                                                              \
       curl -O https://raw.githubusercontent.com/05nelsonm/build-env/sdk/jni/${jversion}.tar.gz ;                                \
       if [ "${jversion}" = "java6" ]; then SHA256_JNI="bad72b7e9aefcc3e592fee59034a8754782b26087e6c3620f717d1a63338e676"; fi;   \
