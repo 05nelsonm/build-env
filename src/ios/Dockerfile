@@ -1,0 +1,23 @@
+FROM 05nelsonm/build-env.base.ios:latest
+
+ARG ARCH
+ARG PLATFORM
+
+ENV CROSS_TARGET=${ARCH}-apple-darwin
+ENV CROSS_TRIPLE=${CROSS_TARGET}${VERSION_DARWIN} \
+    CROSS_ROOT=${BUILD_ENV}/ios/${ARCH}-${PLATFORM}
+ENV CROSS_BIN=${CROSS_ROOT}/bin \
+    PATH_SDK=${CROSS_ROOT}/.sdk
+
+# For pkg-config-crosswrapper.sh
+ENV BUILD_ENV_SYSROOT=${PATH_SDK}
+
+ENV PATH=${CROSS_BIN}:${PATH}
+
+ENV AR=${CROSS_BIN}/${CROSS_TRIPLE}-ar \
+    AS=${CROSS_BIN}/${CROSS_TRIPLE}-as \
+    CC=${CROSS_BIN}/${CROSS_TRIPLE}-clang \
+    CXX=${CROSS_BIN}/${CROSS_TRIPLE}-clang++ \
+    LD=${CROSS_BIN}/${CROSS_TRIPLE}-ld \
+    RANLIB=${CROSS_BIN}/${CROSS_TRIPLE}-ranlib \
+    STRIP=${CROSS_BIN}/${CROSS_TRIPLE}-strip
