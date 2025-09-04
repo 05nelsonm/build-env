@@ -54,6 +54,14 @@ The toolchains for `macOS` are built using [osxcross][url-osxcross].
         - Disable via:
             - docker argument: `-e OSXCROSS_ENABLE_WERROR_IMPLICIT_FUNCTION_DECLARATION=0`
             - shell: `export OSXCROSS_ENABLE_WERROR_IMPLICIT_FUNCTION_DECLARATION=0`
+- `pkg-config`:
+    - The `${CROSS_TRIPLE}-pkg-config` wrapper normally provided by [osxcross][url-osxcross], as 
+      described in [osxcross#PKG-CONFIG][url-osxcross-pkg-config], is replaced with a supplemental 
+      implementation which uses `${CROSS_ROOT}/macports/pkgs` as the `PKG_CONFIG_SYSROOT_DIR`, and 
+      sets `PKG_CONFIG_LIBDIR` (only if unset) to `${PKG_CONFIG_SYSROOT_DIR}/opt/local/lib/pkgconfig`
+      before invoking the system installed `pkg-config`. If `osxcross-macports` was not used to 
+      install anything, then no `.pc` files will be referenced, outside of whatever may come from
+      additional search paths defined via `PKG_CONFIG_PATH`.
 - LTS/non-LTS containers:
     - `macos-lts`
         - Built using `MacOSX` sdk version `12.3`
@@ -88,4 +96,5 @@ have been removed.
 [url-osxcross]: https://github.com/tpoechtrager/osxcross
 [url-osxcross-deployment-target]: https://github.com/tpoechtrager/osxcross#deployment-target
 [url-osxcross-macports]: https://github.com/tpoechtrager/osxcross/blob/master/README.MACPORTS.md
+[url-osxcross-pkg-config]: https://github.com/tpoechtrager/osxcross/blob/master/README.PKG-CONFIG.md
 [url-kotlin-compat]: https://www.jetbrains.com/help/kotlin-multiplatform-dev/multiplatform-compatibility-guide.html#version-compatibility
