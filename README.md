@@ -3,111 +3,86 @@
 [![badge-license]][url-license]
 [![badge-latest-release]][url-latest-release]
 
-A consortium of docker containers with pre-built tools for cross compiling software. 
-An older toolchain is utilized in order to support running on older operating systems. 
-Currently is very bare bones, but gets the job done.
+Docker containers with pre-built cross-compiler toolchains.
 
-`05nelsonm/build-env.{target os}.{target arch}:{tag}`
+`05nelsonm/build-env.{platform}.{arch}:{tag}`
 
 e.g.
 ```sh
-# Drop into a shell with current directory mounted to compile something for Linux aarch64
-
 docker run \
   --rm \
   -u "$(id -u):$(id -g)" \
   -v ./:/work \
-  -it 05nelsonm/build-env.linux-libc.aarch64:0.3.0 \
+  -it 05nelsonm/build-env.linux-libc.aarch64:0.4.0 \
   bash
 ```
 
-### The following environment variables are available:
+### Environment Variables
 
- - All images
-   ```
-   CROSS_BIN            # location of the compiler tools (on PATH)
-   CROSS_TRIPLE         # the compiler name (e.g. i686-linux-android21)
-   CC
-   CXX
-   AR
-   AS
-   LD
-   RANLIB
-   STRIP
-   JNI_H                # location of jni.h and jni_md.h headers for various
-                        # versions of java (currently 6,8,11,17,21)
-                        # e.g. CFLAGS="-I${JNI_H}/java8/include"
-   ```
+The following environment variables are available for all containers.
 
- - Android images
-   ```
-   CROSS_TARGET         # CROSS_TRIPLE but w/o the version suffix
-   PATH_NDK             # location of the Android NDK
-   PATH_PREBUILT        # location of the Android NDK prebuilt toolchain
-   ANDROID_NDK          # alias of PATH_NDK
-   ANDROID_NDK_HOME     # alias of PATH_NDK
-   ANDROID_NDK_ROOT     # alias of PATH_NDK
-   VERSION_ANDROID      # the API version (current default is 21)
-   VERSION_NDK          # e.g. 26.1.10909125
-   REVISION_NDK         # e.g. 26b
-   ```
+- `BUILD_ENV`
+    - The root directory where all things not provided by package manager are installed.
+- `JNI_H`
+    - The root directory where `jni.h` headers are installed.
+    - Versions:
+        - `java6`
+        - `java8`
+        - `java11`
+        - `java17`
+        - `java21`
+    - e.g. `CFLAGS+=" -I${JNI_H}/java6/include"`
+- `CROSS_ROOT`
+    - The root directory where the cross-compiler toolchain is installed.
+- `CROSS_BIN`
+    - The directory where the cross-compiler programs are installed.
+    - Is always on `PATH`
+- `CROSS_TRIPLE`
+    - e.g. `aarch64-unknown-linux-gnu`
+    - e.g. `aarch64-linux-android21`
+    - e.g. `aarch64-apple-darwin24.4`
+    - e.g. `x86_64-w64-mingw32`
+- `AR`
+    - `${CROSS_TRIPLE}-ar`
+- `AS`
+    - `${CROSS_TRIPLE}-as`
+- `CC`
+    - `${CROSS_TRIPLE}-{clang/gcc}`
+    - e.g. `aarch64-unknown-linux-gnu-gcc`
+    - e.g. `aarch64-linux-android21-clang`
+    - e.g. `aarch64-apple-darwin24.4-clang`
+    - e.g. `x86_64-w64-mingw32-gcc`
+- `CXX`
+    - `${CROSS_TRIPLE}-{clang++/gcc++}`
+    - e.g. `aarch64-unknown-linux-gnu-g++`
+    - e.g. `aarch64-linux-android21-clang++`
+    - e.g. `aarch64-apple-darwin24.4-clang++`
+    - e.g. `x86_64-w64-mingw32-gcc++`
+- `LD`
+    - `${CROSS_TRIPLE}-ld`
+- `RANLIB`
+    - `${CROSS_TRIPLE}-ranlib`
+- `STRIP`
+    - `${CROSS_TRIPLE}-strip`
 
- - Ios & Ios Simulator images
-   ```
-   CROSS_TARGET         # CROSS_TRIPLE but w/o the version suffix
-   PATH_SDK             # location of iPhoneOS{version}.sdk
-   PATH_IOSCROSS        # location of ioscross
-   VERSION_DARWIN
-   VERSION_SDK
-   VERSION_MIN          # minimum ios version
-   ```
+Additional platform specific environment variables are provided. See:
+- [Android](src/android/README.md)
+- [iOS](src/ios/README.md)
+- [Linux](src/linux/README.md)
+- [macOS](src/macos/README.md)
+- [MinGW](src/mingw/README.md)
 
- - Macos images
-   ```
-   CROSS_TARGET         # CROSS_TRIPLE but w/o the version suffix
-   PATH_SDK             # location of MacOSX{version}.sdk
-   PATH_OSXCROSS        # location of osxcross
-   VERSION_DARWIN
-   VERSION_SDK
-   ```
+### pkg-config
 
- - Mingw images
-   ```
-   WIDL
-   WINDMC
-   WINDRES
-   ```
+All containers have a proper `${CROSS_TRIPLE}-pkg-config` available to ensure 
+only `.pc` files from the toolchain are referenced, and not those from the system.
 
-### Notes
+### WORKDIR
 
-Use the provided environment variables whenever possible.
-
-**Android:**
-
-By default, `android` containers are set to use the minimum supported version 
-of the Android NDK, but sym links are generated for all API versions on all 
-tools. If you need a higher API, use the `CROSS_TARGET` environment variable.
-
-```
-${CROSS_TARGET}{desired-api}-{tool}
-
-# e.g. ${CROSS_TARGET}23-clang
-```
-
-**Macos:**
-
-The `macos-lts` containers utilize `MacOSX12.3.sdk` providing a minimum supported 
-version of `10.9`. This will follow Apple's End Of Life schedule for `macOS` which can be 
-found [HERE][url-macos-eol]. After about 1 year of EOL, the SDK will be bumped.
-
-The `macos` containers utilize `MacOSX15.1.sdk` (currently) providing a minimum supported 
-version of `10.13`. This will follow Kotlin Multiplatform's Xcode compatibility version 
-which can be found [HERE][url-kotlin-compatibility].
+The `WORKDIR` is `/work`
 
 [badge-latest-release]: https://img.shields.io/badge/latest--release-0.3.0-blue.svg?style=flat
 [badge-license]: https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat
 
 [url-latest-release]: https://github.com/05nelsonm/build-env/releases/latest
 [url-license]: https://www.apache.org/licenses/LICENSE-2.0
-[url-kotlin-compatibility]: https://kotlinlang.org/docs/multiplatform-compatibility-guide.html#version-compatibility
-[url-macos-eol]: https://endoflife.date/macos
