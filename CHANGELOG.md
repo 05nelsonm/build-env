@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## Version 0.4.0 (2025-09-04)
+ - Adds support for `linux-libc.riscv64` [[#30]][30] [[#35]][35]
+ - Updates Android `NDK` to `28c` [[#33]][33] [[#35]][35]
+ - Refactors container hierarchy [[#35]][35]
+     - Base image is now shared by all containers (no more `linux-libc.base` and `non-linux.base`)
+         - Coorinates are now `05nelsonm/build-env.base`
+         - Now builds off of `debian:slim-12` image
+     - All `{platform}.base` image coordinates are now `05nelsonm/build-env.base.{platform}`
+     - Updates `macos` container toolchain SDK to `15.4`
+     - `macos`, `macos-lts`, `ios`, and `ios-simulator` containers now use `clang-19` from debian
+       package manager, instead of compiling `llvm` from source.
+     - Fixes `macos` and `macos-lts` containers `osxcross-macports` usage when running as non-root
+     - `linux-libc` containers now build their toolchains from source.
+         - See [linux#README](src/linux/README.md#toolchain-info)
+     - Refactored environment variables. See the following notes for affected containers:
+         - [android#README](src/android/README.md#notable-history)
+         - [ios#README](src/ios/README.md#notable-history)
+         - [macos#README](src/macos/README.md#notable-history)
+ - Updates documentation [[#36]][36] [[#37]][37]
+
 ## Version 0.3.0 (2025-02-19)
  - `non-linux.base` now utilizes `ubuntu:24.04` [[#25]][25]
  - `macos.base`, `macos.aarch64`, and `macos.x86_64` now use
@@ -47,3 +67,8 @@
 [25]: https://github.com/05nelsonm/build-env/pull/25
 [26]: https://github.com/05nelsonm/build-env/pull/26
 [27]: https://github.com/05nelsonm/build-env/pull/27
+[30]: https://github.com/05nelsonm/build-env/pull/30
+[33]: https://github.com/05nelsonm/build-env/pull/33
+[35]: https://github.com/05nelsonm/build-env/pull/35
+[36]: https://github.com/05nelsonm/build-env/pull/36
+[37]: https://github.com/05nelsonm/build-env/pull/37
