@@ -1,0 +1,11 @@
+--- a/gcc/gcc.c	2021-05-14 08:42:09.000000000 +0000
++++ b/gcc/gcc.c	2025-09-09 19:58:51.323011377 +0000
+@@ -874,7 +874,7 @@
+ #else
+ #define LINK_SSP_SPEC "%{fstack-protector|fstack-protector-all" \
+ 		       "|fstack-protector-strong|fstack-protector-explicit" \
+-		       ":-lssp_nonshared -lssp}"
++		       ":-lssp_nonshared}"
+ #endif
+ #endif
+ 
