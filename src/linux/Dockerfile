@@ -2,6 +2,7 @@ FROM 05nelsonm/build-env.staging.crosstool:latest AS stage0
 
 ARG CROSS_TRIPLE
 COPY crosstool.config /work/.config
+COPY patches /work/patches
 
 ENV HOME=/work
 
