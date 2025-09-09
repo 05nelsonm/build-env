@@ -27,6 +27,7 @@ function build:all { ## Builds all containers
   build:all:android
   build:all:ios
   build:all:linux-libc
+  build:all:linux-musl
   build:all:mingw
   build:all:macos
 }
@@ -51,6 +52,12 @@ function build:all:linux-libc { ## Builds all Linux Libc containers
   build:linux-libc:riscv64
   build:linux-libc:x86
   build:linux-libc:x86_64
+}
+
+function build:all:linux-musl { ## Builds all Linux Musl containers
+  build:linux-musl:aarch64
+  build:linux-musl:x86
+  build:linux-musl:x86_64
 }
 
 function build:all:macos { ## Builds all macOS containers
@@ -161,6 +168,30 @@ function build:linux-libc:x86_64 { ## Builds Linux Libc x86_64
   local os_subtype="libc"
   local os_arch="x86_64"
   local build_args="CROSS_TRIPLE=x86_64-unknown-linux-gnu"
+  __exec:docker:assemble
+}
+
+function build:linux-musl:aarch64 { ## Builds Linux Musl aarch64
+  local os_name="linux"
+  local os_subtype="musl"
+  local os_arch="aarch64"
+  local build_args="CROSS_TRIPLE=aarch64-unknown-linux-musl"
+  __exec:docker:assemble
+}
+
+function build:linux-musl:x86 { ## Builds Linux Musl i686
+  local os_name="linux"
+  local os_subtype="musl"
+  local os_arch="x86"
+  local build_args="CROSS_TRIPLE=i686-unknown-linux-musl"
+  __exec:docker:assemble
+}
+
+function build:linux-musl:x86_64 { ## Builds Linux Musl x86_64
+  local os_name="linux"
+  local os_subtype="musl"
+  local os_arch="x86_64"
+  local build_args="CROSS_TRIPLE=x86_64-unknown-linux-musl"
   __exec:docker:assemble
 }
 
