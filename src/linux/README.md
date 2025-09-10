@@ -7,13 +7,16 @@ The following images are available from docker hub:
 - `05nelsonm/build-env.linux-libc.riscv64`
 - `05nelsonm/build-env.linux-libc.x86`
 - `05nelsonm/build-env.linux-libc.x86_64`
+- `05nelsonm/build-env.linux-musl.aarch64`
+- `05nelsonm/build-env.linux-musl.x86`
+- `05nelsonm/build-env.linux-musl.x86_64`
 
 Compiler:
 - `GCC`
 
 ### Environment Variables
 
-The following are environment variables available to all `05nelsonm/build-env.linux-libc.{arch}` 
+The following are environment variables available to all `05nelsonm/build-env.linux-{libc/musl}.{arch}` 
 containers, in addition to those described in the [root README](../../README.md#environment-variables).
 
 - `CPP`
@@ -63,6 +66,25 @@ The toolchains for `Linux` are built using [crosstool-ng][url-crosstool].
         - GLibC: `2.23`
         - GCC: `8.5.0`
         - [crosstool.config](libc/x86_64/crosstool.config)
+- `-musl`:
+    - `aarch64`:
+        - Linux Kernel: `4.4`
+        - BinUtils: `2.43`
+        - Musl: `1.1.16`
+        - GCC: `8.5.0`
+        - [crosstool.config](musl/aarch64/crosstool.config)
+    - `x86`:
+        - Linux Kernel: `4.4`
+        - BinUtils: `2.43`
+        - Musl: `1.1.16`
+        - GCC: `8.5.0`
+        - [crosstool.config](musl/x86/crosstool.config)
+    - `x86_64`:
+        - Linux Kernel: `4.4`
+        - BinUtils: `2.43`
+        - Musl: `1.1.16`
+        - GCC: `8.5.0`
+        - [crosstool.config](musl/x86_64/crosstool.config)
 
 ### Dockerfiles
 

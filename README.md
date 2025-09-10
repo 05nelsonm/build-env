@@ -49,12 +49,14 @@ The following environment variables are available for all containers.
 - `CC`
     - `${CROSS_TRIPLE}-{clang/gcc}`
     - e.g. `aarch64-unknown-linux-gnu-gcc`
+    - e.g. `aarch64-unknown-linux-musl-gcc`
     - e.g. `aarch64-linux-android21-clang`
     - e.g. `aarch64-apple-darwin24.4-clang`
     - e.g. `x86_64-w64-mingw32-gcc`
 - `CXX`
     - `${CROSS_TRIPLE}-{clang++/gcc++}`
     - e.g. `aarch64-unknown-linux-gnu-g++`
+    - e.g. `aarch64-unknown-linux-musl-g++`
     - e.g. `aarch64-linux-android21-clang++`
     - e.g. `aarch64-apple-darwin24.4-clang++`
     - e.g. `x86_64-w64-mingw32-gcc++`
