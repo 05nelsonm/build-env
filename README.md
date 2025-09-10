@@ -83,7 +83,7 @@ only `.pc` files from the toolchain are referenced, and not those from the syste
 
 The `WORKDIR` is `/work`
 
-[badge-latest-release]: https://img.shields.io/badge/latest--release-0.4.0-blue.svg?style=flat
+[badge-latest-release]: https://img.shields.io/badge/latest--release-0.4.1-blue.svg?style=flat
 [badge-license]: https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat
 
 [url-latest-release]: https://github.com/05nelsonm/build-env/releases/latest
