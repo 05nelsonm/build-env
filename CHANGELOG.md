@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Version 0.4.1 (2025-09-10)
+ - Adds support for `linux-musl` [[#39]][39]
+     - `aarch64`
+     - `x86`
+     - `x86_64`
+
 ## Version 0.4.0 (2025-09-04)
  - Adds support for `linux-libc.riscv64` [[#30]][30] [[#35]][35]
  - Updates Android `NDK` to `28c` [[#33]][33] [[#35]][35]
@@ -72,3 +78,4 @@
 [35]: https://github.com/05nelsonm/build-env/pull/35
 [36]: https://github.com/05nelsonm/build-env/pull/36
 [37]: https://github.com/05nelsonm/build-env/pull/37
+[39]: https://github.com/05nelsonm/build-env/pull/39

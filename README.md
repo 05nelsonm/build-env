@@ -13,7 +13,7 @@ docker run \
   --rm \
   -u "$(id -u):$(id -g)" \
   -v ./:/work \
-  -it 05nelsonm/build-env.linux-libc.aarch64:0.4.0 \
+  -it 05nelsonm/build-env.linux-libc.aarch64:0.4.1 \
   bash
 ```
 
