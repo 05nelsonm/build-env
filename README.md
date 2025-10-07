@@ -39,6 +39,7 @@ The following environment variables are available for all containers.
     - Is always on `PATH`
 - `CROSS_TRIPLE`
     - e.g. `aarch64-unknown-linux-gnu`
+    - e.g. `aarch64-unknown-linux-musl`
     - e.g. `aarch64-linux-android21`
     - e.g. `aarch64-apple-darwin24.4`
     - e.g. `x86_64-w64-mingw32`
@@ -54,12 +55,12 @@ The following environment variables are available for all containers.
     - e.g. `aarch64-apple-darwin24.4-clang`
     - e.g. `x86_64-w64-mingw32-gcc`
 - `CXX`
-    - `${CROSS_TRIPLE}-{clang++/gcc++}`
+    - `${CROSS_TRIPLE}-{clang++/g++}`
     - e.g. `aarch64-unknown-linux-gnu-g++`
     - e.g. `aarch64-unknown-linux-musl-g++`
     - e.g. `aarch64-linux-android21-clang++`
     - e.g. `aarch64-apple-darwin24.4-clang++`
-    - e.g. `x86_64-w64-mingw32-gcc++`
+    - e.g. `x86_64-w64-mingw32-g++`
 - `LD`
     - `${CROSS_TRIPLE}-ld`
 - `RANLIB`
